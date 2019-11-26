@@ -1,0 +1,6 @@
+**/target/
+**/nb-configuration.xml
+
+/nbproject/
+
+*/node_modules/
