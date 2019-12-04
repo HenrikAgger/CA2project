@@ -9,7 +9,9 @@ import utils.EMF_Creator;
 import facadesSP.PersonFacade;
 import java.io.IOException;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -94,4 +96,17 @@ public class PersonResource {
         String zips = FACADE.getZipCodesDK();
         return Response.ok(GSON.toJson(zips)).build();
     }
+    
+    @POST
+    @Path("addperson")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response addPerson(String data) throws IOException {
+        PersonDTO addPerson = GSON.fromJson(data, PersonDTO.class);
+        FACADE.addPerson(addPerson);
+        return Response.ok("{\"message\":done}").build();
+        
+    }
+    
+    
     }

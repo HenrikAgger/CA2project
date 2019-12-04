@@ -171,6 +171,27 @@ public class PersonFacade {
         return response.toString();
     }
 
+    public void createPerson(PersonDTO personDTO){
+        EntityManager em = getEntityManager();
+        try {
+            //Person person = new Person(personDTO.getEmail(), personDTO.getFirstName(), personDTO.getLastName(), personDTO.getPhones(), new Address(personDTO.getStreet(), personDTO.getStreetInfo(), new CityInfo(personDTO.getZip(), personDTO.getCity())));   //.String firstName, String lastName, List<Phone> phones,Address address);
+            Person person = new PersonDTOMapper().DTOMapper(personDTO);
+            
+            em.getTransaction().begin();
+            em.persist(person);
+            em.getTransaction().commit();
+            
+        } catch (Exception e) {
+        }
+            
+        
+    }
+    
+    
+    
+    
+    
+    
     //@Override
     public void populatePersons() {
 

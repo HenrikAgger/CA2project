@@ -40,7 +40,7 @@ public class Address implements Serializable {
     @JoinColumn(name = "cityInfoId")
     private CityInfo cityInfo;
     
-    @OneToMany(mappedBy="address", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy="address", cascade = CascadeType.PERSIST)
     @JoinColumn(name = "personId")
     private List<Person> persons;
     
