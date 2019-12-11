@@ -20,7 +20,7 @@ function getAllPersonsInCity() {
     .then(data => {
       console.log(data);
       data.forEach(person => {
-        document.getElementById("index").append(" " + person);
+        document.getElementById("index").append(" " + person.firstName);
       });
     });
 }
@@ -79,6 +79,9 @@ function submit(e) {
   var url = "https://henriksdomainname.dk/CA2/api/person/addperson";
   fetch(url, {
     method: "POST",
+    headers: {
+        'Content-Type': 'application/json'
+      },
     body: JSON.stringify(person)
   });
 }
