@@ -103,7 +103,7 @@ public class PersonResource {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response addPerson(String data) throws IOException {
         PersonDTO addPerson = GSON.fromJson(data, PersonDTO.class);
-        FACADE.addPerson(addPerson);
+        FACADE.createPerson(addPerson);
         return Response.ok("{\"message\":done}").build();
         
     }

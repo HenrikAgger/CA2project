@@ -36,7 +36,7 @@ public class Address implements Serializable {
     private String street;
     private String additionalInfo;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "cityInfoId")
     private CityInfo cityInfo;
     

@@ -8,22 +8,31 @@
 
 <body>
     <form id="createPerson">
-        <input type="text" name="email" id="email" required>
-        <input type="text" name="firstName" id="firstName" required>
-        <input type="text" name="lastName" id="lastName" required>
-        <input type="text" name="street" id="street"required>
-        <input type="text" name="streetInfo" id="streetInfo" required>
-        <input type="text" name="zip" id="zip" required>
-        <input type="text" name="city" id="city" required>
+        <input type="text" name="email" id="email" placeholder="Email" required>
+        <input type="text" name="firstName" id="firstName" placeholder="Firstname" required>
+        <input type="text" name="lastName" id="lastName" placeholder="Lastname" required>
+        <input type="text" name="street" id="street" placeholder="Street" required>
+        <input type="text" name="streetInfo" id="streetInfo" placeholder="Street info" required>
+        <input type="text" name="zip" id="zip" placeholder="Zip" required>
+        <input type="text" name="city" id="city" placeholder="City" required>
 
         <input type="submit" value="Submit">
       </form>
   <div id="index" class="container">
-   
-  </div>
-  <div id="zips">
+    <h1>Persons in swimming hobby: <span id="phcount"></span></h1>
+    <ul id="PersonInHobby">
 
+    </ul>
+    <h1>Persons in zip 2630</h1>
+    <ul id="PersonInzip">
+
+    </ul>
+    <h1>All zips in Denmark</h1>
+    <select id="zips">
+
+    </select>
   </div>
+  
 
   <script src="bundle.js"></script>
 </body>

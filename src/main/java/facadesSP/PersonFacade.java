@@ -177,11 +177,23 @@ public class PersonFacade {
             //Person person = new Person(personDTO.getEmail(), personDTO.getFirstName(), personDTO.getLastName(), personDTO.getPhones(), new Address(personDTO.getStreet(), personDTO.getStreetInfo(), new CityInfo(personDTO.getZip(), personDTO.getCity())));   //.String firstName, String lastName, List<Phone> phones,Address address);
             Person person = new PersonDTOMapper().DTOMapper(personDTO);
             
+            
             em.getTransaction().begin();
+            List<CityInfo> cityInfo = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode=:zipCode AND c.city=:city", CityInfo.class)
+                    .setParameter("zipCode", person.getAddress().getCityInfo().getZipCode())
+                    .setParameter("city", person.getAddress().getCityInfo().getCity()).getResultList();
+            
+            if (cityInfo.isEmpty()){
+                em.persist(person.getAddress().getCityInfo());
+            } else {
+                person.getAddress().setCityInfo(cityInfo.get(0));
+            }
+            
             em.persist(person);
             em.getTransaction().commit();
             
-        } catch (Exception e) {
+        } finally {
+            em.close();
         }
             
         
