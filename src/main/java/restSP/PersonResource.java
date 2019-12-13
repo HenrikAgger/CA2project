@@ -1,5 +1,7 @@
 package restSP;
 
+import DTO.CityInfoDTO;
+import DTO.HobbyDTO;
 import DTO.PersonDTO;
 import DTO.PersonsDTO;
 import com.google.gson.Gson;
@@ -8,6 +10,7 @@ import errorhandling.PersonNotFoundException;
 import utils.EMF_Creator;
 import facadesSP.PersonFacade;
 import java.io.IOException;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -108,5 +111,22 @@ public class PersonResource {
         
     }
     
-    
+    @GET
+    @Path("hobby/all")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<HobbyDTO> getHobbies() {
+        List<HobbyDTO> hobbies = FACADE.getAllHobbies();
+        return hobbies;
     }
+    
+    @GET
+    @Path("city/all")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<CityInfoDTO> getCities() {
+        List<CityInfoDTO> cities = FACADE.getAllCities();
+        return cities;
+    }
+    
+    
+    
+}

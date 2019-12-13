@@ -34,7 +34,7 @@ public class Hobby implements Serializable {
     private String name;
     private String description;
 
-    @ManyToMany(mappedBy = "hobbies", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "hobbies", cascade = CascadeType.PERSIST)
     @JoinColumn(name = "personsId")
     private List<Person> persons;
     

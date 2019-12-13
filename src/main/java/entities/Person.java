@@ -34,12 +34,12 @@ public class Person implements Serializable {
     private String firstName;
     private String lastName;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy="person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "phoneId")
     private List<Phone> phones = new ArrayList<>();
 
     
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "addressId")
     private Address address;
     

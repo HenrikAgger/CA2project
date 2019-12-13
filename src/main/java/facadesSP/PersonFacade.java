@@ -1,5 +1,7 @@
 package facadesSP;
 
+import DTO.CityInfoDTO;
+import DTO.HobbyDTO;
 import DTO.PersonDTO;
 import DTO.PersonDTOMapper;
 import DTO.PersonsDTO;
@@ -18,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -113,12 +114,8 @@ public class PersonFacade {
 
     public PersonsDTO getAllPersonsByCity(String zipCode) {
         EntityManager em = getEntityManager();
-        List<Address> addresses = em.createQuery("SELECT a FROM Address a WHERE a.cityInfo.zipCode = :zipCode").setParameter("zipCode", zipCode).getResultList();
+        List<Person> persons = em.createQuery("SELECT p FROM Person p WHERE p.address.cityInfo.zipCode = :zipCode", Person.class).setParameter("zipCode", zipCode).getResultList();
 
-        List<Person> persons = new ArrayList<>();
-        for (Address address : addresses) {
-            persons.addAll(address.getPerson());
-        }
         PersonsDTO personsDTO = new PersonsDTO(persons);
         return personsDTO;
     }
@@ -164,48 +161,61 @@ public class PersonFacade {
         BufferedReader rd = new BufferedReader(new InputStreamReader(is));
         StringBuilder response = new StringBuilder();
         String line;
-        while ((line = rd.readLine()) != null){
+        while ((line = rd.readLine()) != null) {
             response.append(line);
         }
         rd.close();
         return response.toString();
     }
 
-    public void createPerson(PersonDTO personDTO){
+    public void createPerson(PersonDTO personDTO) {
         EntityManager em = getEntityManager();
         try {
             //Person person = new Person(personDTO.getEmail(), personDTO.getFirstName(), personDTO.getLastName(), personDTO.getPhones(), new Address(personDTO.getStreet(), personDTO.getStreetInfo(), new CityInfo(personDTO.getZip(), personDTO.getCity())));   //.String firstName, String lastName, List<Phone> phones,Address address);
             Person person = new PersonDTOMapper().DTOMapper(personDTO);
-            
-            
+
             em.getTransaction().begin();
-            List<CityInfo> cityInfo = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode=:zipCode AND c.city=:city", CityInfo.class)
-                    .setParameter("zipCode", person.getAddress().getCityInfo().getZipCode())
-                    .setParameter("city", person.getAddress().getCityInfo().getCity()).getResultList();
-            
-            if (cityInfo.isEmpty()){
+            List<CityInfo> cityInfo = em.createQuery("SELECT c FROM CityInfo c WHERE c.zipCode=:zipCode", CityInfo.class)
+                    .setParameter("zipCode", person.getAddress().getCityInfo().getZipCode()).getResultList();
+
+            if (cityInfo.isEmpty()) {
                 em.persist(person.getAddress().getCityInfo());
             } else {
                 person.getAddress().setCityInfo(cityInfo.get(0));
             }
-            
+
             em.persist(person);
             em.getTransaction().commit();
-            
+
         } finally {
             em.close();
         }
+    }
             
         
+
+    public List<HobbyDTO> getAllHobbies() {
+        EntityManager em = getEntityManager();
+        try {
+            List<HobbyDTO> hobby = em.createQuery("SELECT new DTO.HobbyDTO(h) FROM Hobby h", HobbyDTO.class).getResultList();
+            return hobby;
+        } finally {
+            em.close();
+        }
     }
     
-    
-    
-    
-    
-    
-    //@Override
-    public void populatePersons() {
+    public List<CityInfoDTO> getAllCities() {
+        EntityManager em = getEntityManager();
+        try {
+            List<CityInfoDTO> cityInfo = em.createQuery("SELECT new DTO.CityInfoDTO(c) FROM CityInfo c", CityInfoDTO.class).getResultList();
+            return cityInfo;
+        } finally {
+            em.close();
+        }
+    }
+
+//@Override
+public void populatePersons() {
 
         EntityManager em = emf.createEntityManager();
 

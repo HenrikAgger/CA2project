@@ -1,7 +1,39 @@
 import "bootstrap/dist/css/bootstrap.css";
 
-function getAllPersonsByHobby() {
-  fetch("https://henriksdomainname.dk/CA2/api/person/all/hobby/swimming")
+var url="http://henriksdomainname.dk/CA2";
+
+function getHobbyAndCities(){
+  fetch(url+"/api/person/hobby/all")
+    .then(data => data.json())
+    .then(data => {
+      console.log(data);
+      data.forEach(hobby => {
+        var hobbies = document.getElementById("hobbies");
+        var option = document.createElement("option");
+        option.text = hobby.name;
+        option.value = hobby.name;
+        hobbies.add(option);
+      });
+    });
+    fetch(url+"/api/person/city/all")
+    .then(data => data.json())
+    .then(data => {
+      console.log(data);
+      data.forEach(city => {
+        var cities = document.getElementById("cities");
+        var option = document.createElement("option");
+        option.text = city.zipCode;
+        option.value = city.zipCode;
+        cities.add(option);
+      });
+    });
+}
+getHobbyAndCities();
+
+
+function getAllPersonsByHobby(hobby) {
+  document.getElementById("PersonInHobby").innerHTML="";
+  fetch(url+"/api/person/all/hobby/"+hobby)
     .then(data => data.json())
     .then(data => {
       console.log(data);
@@ -13,10 +45,11 @@ function getAllPersonsByHobby() {
     });
 }
 
-getAllPersonsByHobby();
+getAllPersonsByHobby("swimming");
 
-function getAllPersonsInCity() {
-  fetch("https://henriksdomainname.dk/CA2/api/person/all/city/2630")
+function getAllPersonsInCity(zipcode) {
+  document.getElementById("PersonInzip").innerHTML="";
+  fetch(url + "/api/person/all/city/"+zipcode)
     .then(data => data.json())
     .then(data => {
       console.log(data);
@@ -27,18 +60,18 @@ function getAllPersonsInCity() {
       });
     });
 }
+getAllPersonsInCity(2860);
 
-getAllPersonsInCity();
 
-function getNoOfPersonsByHobby() {
-  fetch("https://henriksdomainname.dk/CA2/api/person/hobby/count/swimming")
+function getNoOfPersonsByHobby(hobby) {
+  fetch(url + "/api/person/hobby/count/"+hobby)
     .then(data => data.json())
     .then(data => {
       console.log(data);
-      document.getElementById("phcount").append(" " + data.personCount);
+      document.getElementById("phcount").innerHTML= data.personCount;
     });
 }
-getNoOfPersonsByHobby();
+getNoOfPersonsByHobby("swimming");
 
 function getNoOfAllZipDK() {
   fetch("http://dawa.aws.dk/postnumre")
@@ -56,7 +89,22 @@ getNoOfAllZipDK();
 
 window.onload = function() {
   document.getElementById("createPerson").onsubmit = submit;
+  
+  document.getElementById("cities").onchange = cityChange;
+  document.getElementById("hobbies").onchange = hobbyChange;
 };
+
+function cityChange(){
+  var zipCode = document.getElementById("cities").value;
+  getAllPersonsInCity(zipCode);
+
+}
+
+function hobbyChange(){
+  var hobby = document.getElementById("hobbies").value;
+  getAllPersonsByHobby(hobby);
+  getNoOfPersonsByHobby(hobby);
+}
 
 function submit(e) {
   e.preventDefault();
@@ -82,8 +130,8 @@ function submit(e) {
     phones: []
   };
   
-  var url = "https://henriksdomainname.dk/CA2/api/person/addperson";
-  fetch(url, {
+  var _url = url + "/api/person/addperson";
+  fetch(_url, {
     method: "POST",
     headers: {
         'Content-Type': 'application/json'
